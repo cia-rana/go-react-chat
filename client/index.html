@@ -1,0 +1,48 @@
+<html>
+<head>
+	<meta charset = "utf8">
+	<title>go-react-chat</title>
+</head>
+<body>
+	<textarea name="messagearea"></textarea>
+	<button onclick="sendMessage()">send</button>
+	
+	<p id = "messages"></p>
+
+	<script>
+	  var loc = window.location;
+	  var uri = "ws:";
+
+	  if(loc.protocol === "https:") {
+	    uri = "wss:";
+	  }
+
+	  uri += "//" + loc.host + loc.pathname + "ws";
+
+	  ws = new WebSocket(uri)
+
+	  ws.onopen = function(e) {
+	    console.log("onopen: ", e);
+	  }
+
+	  ws.onmessage = function(e) {
+	    console.log("onmessage: ", e);
+	    var out = document.getElementById("messages");
+	    out.innerHTML += e.data + "<br>";
+	  }
+	
+	  ws.onerror = function(e) {
+	    console.log("onerror: ", e);
+	  }
+
+	  ws.onclose = function(e) {
+	    console.log("onclose: ", e);
+	  }
+
+	  function sendMessage() {
+	    ws.send(document.getElementsByName("messagearea")[0].value);
+	  }
+	  
+	</script>
+</body>
+</html>
